@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiMail, FiMapPin, FiSend } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
 import { personal } from '../data/personal';
 
 const Contact = () => {
@@ -54,10 +54,10 @@ const Contact = () => {
             className="glass-card p-8 text-center"
           >
             <div className="w-14 h-14 rounded-2xl bg-[#E8C48E]/10 border border-[#E8C48E]/20 flex items-center justify-center text-[#E8C48E] text-xl mx-auto">
-              <FiSend />
+              <FiPhone />
             </div>
-            <h3 className="font-heading text-white font-semibold mt-5">Get in Touch</h3>
-            <p className="text-sm text-white/40 mt-1">I'll reply as soon as possible!</p>
+            <h3 className="font-heading text-white font-semibold mt-5">Phone</h3>
+            <p className="text-sm text-white/40 mt-1">{personal.phone}</p>
           </motion.div>
         </div>
       </div>
