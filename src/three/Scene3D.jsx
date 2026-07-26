@@ -3,13 +3,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import FloatingObjects from './FloatingObjects';
 import GoldParticles from './GoldParticles';
-import { useMouse } from '../context/MouseContext';
 import { useScroll } from '../context/ScrollContext';
 import * as THREE from 'three';
 
 const CameraController = () => {
   const { camera } = useThree();
-  const mouse = useMouse();
   const { scrollProgress } = useScroll(); // 0 at top, 1 at bottom
   
   useFrame(() => {
@@ -20,12 +18,12 @@ const CameraController = () => {
     // Smoothly interpolate Z position
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
     
-    // Smoothly interpolate X/Y for parallax effect based on mouse
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouse.normalizedX * 1.5, 0.03);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, mouse.normalizedY * 1.5, 0.03);
+    // Center camera X/Y
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0, 0.03);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.03);
     
-    // Look slightly ahead and towards the mouse to simulate cinematic panning
-    camera.lookAt(mouse.normalizedX * 2, mouse.normalizedY * 2, targetZ - 10);
+    // Look straight ahead
+    camera.lookAt(0, 0, targetZ - 10);
   });
 
   return null;
