@@ -1,10 +1,65 @@
-// TODO: Replace these placeholder projects with real project details from Barath
+import projectsImg from '../assets/images/projects.png';
+
 export const projects = [
-  { id: 1, title: 'Predictive Analytics Dashboard', description: 'Interactive dashboard for visualizing business metrics with predictive modeling capabilities.', tech: ['Python', 'Machine Learning', 'Data Visualization', 'Pandas'], category: 'Data Science', github: null, demo: null, featured: true, status: 'coming-soon', image: null },
-  { id: 2, title: 'MongoDB Data Explorer', description: 'Web-based tool for exploring and querying MongoDB databases with an intuitive interface.', tech: ['MongoDB', 'JavaScript', 'HTML/CSS'], category: 'Web Development', github: null, demo: null, featured: true, status: 'coming-soon', image: null },
-  { id: 3, title: 'Sentiment Analysis Engine', description: 'NLP-powered sentiment analysis tool for processing and classifying text data.', tech: ['Python', 'Machine Learning', 'NLP'], category: 'Data Science', github: null, demo: null, featured: false, status: 'coming-soon', image: null },
-  { id: 4, title: 'Student Management System', description: 'Full-stack application for managing student records with CRUD operations.', tech: ['Java', 'MySQL', 'JDBC'], category: 'Web Development', github: null, demo: null, featured: false, status: 'coming-soon', image: null },
-  { id: 5, title: 'Weather Data Pipeline', description: 'Automated data pipeline for collecting, processing, and visualizing weather data.', tech: ['Python', 'API Integration', 'Data Visualization'], category: 'Data Science', github: null, demo: null, featured: true, status: 'coming-soon', image: null },
-  { id: 6, title: 'Personal 3D Portfolio', description: 'Personal cinematic 3D portfolio website built with React 18, Three.js, GSAP, Framer Motion, and Tailwind CSS.', tech: ['React', 'Three.js', 'GSAP', 'Tailwind CSS'], category: 'Web Development', github: 'https://github.com/barath2005-dotcom/Personal-Portfolio', demo: 'http://localhost:5173/', featured: true, status: 'completed', image: null },
-  { id: 7, title: 'EDA Toolkit', description: 'Comprehensive Exploratory Data Analysis toolkit with automated report generation.', tech: ['Python', 'Pandas', 'Matplotlib', 'Seaborn'], category: 'Data Science', github: null, demo: null, featured: false, status: 'coming-soon', image: null },
+  {
+    id: 1,
+    title: 'AI Resume Analyzer',
+    description: 'AI-Powered resume screening and matching system using NLP and machine learning.',
+    tech: ['Python', 'OpenAI', 'NLP', 'React'],
+    category: 'AI/ML',
+    github: 'https://github.com/barath2005-dotcom',
+    demo: null,
+    featured: true,
+    status: 'completed',
+    image: projectsImg,
+    imagePosition: '0% 10%'
+  },
+  {
+    id: 2,
+    title: 'TaskFlow Pro',
+    description: 'Modern project management tool for productive teams with real-time collaboration.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
+    category: 'Web Development',
+    github: 'https://github.com/barath2005-dotcom',
+    demo: null,
+    featured: true,
+    status: 'completed',
+    image: projectsImg,
+    imagePosition: '50% 10%'
+  },
+  {
+    id: 3,
+    title: 'Nova Store',
+    description: 'Full-stack e-commerce platform with admin dashboard and payment integration.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+    category: 'Web Development',
+    github: 'https://github.com/barath2005-dotcom',
+    demo: null,
+    featured: true,
+    status: 'completed',
+    image: projectsImg,
+    imagePosition: '100% 10%'
+  },
+  {
+    id: 4,
+    title: 'Predictive Analytics Dashboard',
+    description: 'Interactive dashboard for visualizing business metrics with predictive modeling.',
+    tech: ['Python', 'Machine Learning', 'Pandas', 'Plotly'],
+    category: 'Data Science',
+    github: null,
+    demo: null,
+    featured: false,
+    status: 'coming-soon',
+  },
+  {
+    id: 5,
+    title: 'Personal 3D Portfolio',
+    description: 'Cinematic 3D portfolio built with React, Three.js, and premium glassmorphism design.',
+    tech: ['React', 'Three.js', 'GSAP', 'Tailwind CSS'],
+    category: 'Web Development',
+    github: 'https://github.com/barath2005-dotcom/Personal-Portfolio',
+    demo: null,
+    featured: false,
+    status: 'completed',
+  },
 ];
