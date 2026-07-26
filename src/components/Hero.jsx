@@ -77,14 +77,14 @@ export default function Hero() {
           </div>
 
           {/* Right Column */}
-          <motion.div variants={fadeUp} className="relative hidden lg:block">
-            <div className="w-80 h-96 mx-auto rounded-3xl border border-[#E8C48E]/10 bg-white/[0.02] backdrop-blur-sm relative overflow-hidden animate-float-slow">
+          <motion.div variants={fadeUp} className="relative mt-12 lg:mt-0 flex justify-center w-full">
+            <div className="w-64 h-80 sm:w-80 sm:h-96 rounded-3xl border border-[#E8C48E]/10 bg-white/[0.02] backdrop-blur-sm relative overflow-hidden animate-float-slow">
               {/* Subtle gold gradient glow */}
               <div className="absolute inset-0 bg-gradient-to-tr from-[#E8C48E]/5 to-transparent pointer-events-none z-10" />
               
               {/* Decorative Rings */}
-              <div className="absolute top-[-10%] right-[-20%] w-64 h-64 rounded-full border border-[#E8C48E]/10" />
-              <div className="absolute bottom-[-20%] left-[-10%] w-48 h-48 rounded-full border border-[#E8C48E]/10" />
+              <div className="absolute top-[-10%] right-[-20%] w-48 h-48 sm:w-64 sm:h-64 rounded-full border border-[#E8C48E]/10" />
+              <div className="absolute bottom-[-20%] left-[-10%] w-32 h-32 sm:w-48 sm:h-48 rounded-full border border-[#E8C48E]/10" />
               
               {/* Image */}
               <img src={portraitImage} alt="Portrait" className="w-full h-full object-cover mix-blend-luminosity opacity-80" />
