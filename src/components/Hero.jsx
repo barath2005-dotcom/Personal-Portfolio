@@ -37,8 +37,28 @@ export default function Hero() {
               <span className="text-[#E8C48E]/80 text-sm font-mono tracking-wider uppercase">Hello, I'm</span>
             </motion.div>
             
-            <motion.h1 variants={fadeUp} className="text-4xl md:text-6xl lg:text-8xl font-heading font-bold gradient-gold-text mb-4 mt-8 md:mt-0">
-              BARATH R
+            <motion.h1 variants={fadeUp} className="text-4xl md:text-6xl lg:text-8xl font-heading font-bold gradient-gold-text mb-4 mt-8 md:mt-0 flex">
+              {"BARATH R".split("").map((char, index) => (
+                <motion.span
+                  key={index}
+                  animate={{
+                    textShadow: [
+                      "0px 0px 0px rgba(232, 196, 142, 0)",
+                      "0px 0px 25px rgba(232, 196, 142, 0.9)",
+                      "0px 0px 0px rgba(232, 196, 142, 0)",
+                    ]
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    repeatDelay: 3,
+                    delay: 2 + (index * 0.15),
+                  }}
+                  className={char === ' ' ? 'w-4 md:w-8' : ''}
+                >
+                  {char}
+                </motion.span>
+              ))}
             </motion.h1>
             
             <motion.div variants={fadeUp} className="flex flex-col items-start gap-2 mb-6 w-full">
