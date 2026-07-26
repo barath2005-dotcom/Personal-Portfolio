@@ -43,8 +43,7 @@ export default function Hero() {
             
             <motion.div variants={fadeUp} className="flex flex-col items-start gap-2 mb-6 w-full">
               <h2 className="text-xs sm:text-sm md:text-lg lg:text-xl tracking-[0.2em] md:tracking-[0.3em] font-medium text-[#E8C48E] uppercase drop-shadow-[0_0_15px_rgba(232,196,142,0.3)]">CO-FOUNDER & COO @ JUNO ROBOTICS</h2>
-              <h3 className="text-[10px] sm:text-xs md:text-sm lg:text-base tracking-[0.3em] md:tracking-[0.4em] text-white/80 font-light uppercase mt-1">SOFTWARE ENGINEER</h3>
-              <h4 className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] text-[#E8C48E]/50 font-light uppercase">AI & DATA SCIENCE STUDENT</h4>
+              <h4 className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] text-[#E8C48E]/50 font-light uppercase mt-1">AI & DATA SCIENCE STUDENT</h4>
             </motion.div>
             
             <motion.p variants={fadeUp} className="text-white/50 text-sm md:text-base max-w-md leading-relaxed mt-4 md:mt-6">
