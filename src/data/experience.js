@@ -1,6 +1,6 @@
 export const experience = [
   {
-    year: '2024 – Present',
+    year: '2023 - Present',
     role: 'AI & Data Science Student',
     company: 'Dr. Mahalingam College of Engineering & Technology',
     description: 'Pursuing B.E. in AI & Data Science with focus on Machine Learning and Data Engineering.',
@@ -8,7 +8,7 @@ export const experience = [
     type: 'education',
   },
   {
-    year: '2023',
+    year: '2025',
     role: 'Full Stack Developer Intern',
     company: 'Brill Fort Technologies',
     description: 'Worked on real-world projects using MERN stack, building production-ready web applications.',
@@ -16,7 +16,7 @@ export const experience = [
     type: 'internship',
   },
   {
-    year: '2022',
+    year: '2026',
     role: 'Web Developer Intern',
     company: 'JUNO Robotics',
     description: 'Developed responsive websites and learned modern web technologies.',
