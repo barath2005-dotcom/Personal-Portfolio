@@ -1,0 +1,32 @@
+export const education = [
+  {
+    degree: 'Bachelor of Engineering',
+    field: 'Artificial Intelligence and Data Science',
+    institution: 'Dr. Mahalingam College of Engineering and Technology',
+    university: 'Anna University',
+    location: 'Pollachi',
+    period: '2023 \u2013 2027 (Expected)',
+    grade: 'CGPA: 7.33',
+    status: 'In Progress',
+  },
+  {
+    degree: 'HSC / Diploma',
+    field: null,
+    institution: 'Vani Vidyalaya Matriculation Higher Secondary School',
+    university: null,
+    location: 'Uppupalayam',
+    period: 'Completed March 2023',
+    grade: 'Percentage: 58.16%',
+    status: 'Completed',
+  },
+  {
+    degree: 'SSLC',
+    field: null,
+    institution: 'Sri Vani International CBSE School',
+    university: null,
+    location: 'Uppupalayam',
+    period: 'Completed March 2021',
+    grade: 'Percentage: 63.2%',
+    status: 'Completed',
+  },
+];
