@@ -53,7 +53,7 @@ const IntroLoader = ({ onComplete }) => {
           exit={{ opacity: 0, transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] } }}
         >
           {/* Background Grid Pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+          <div className="absolute inset-0 bg-grid-pattern pointer-events-none" />
           
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-[#E8C48E]/5 blur-[120px] pointer-events-none rounded-full" />
 
