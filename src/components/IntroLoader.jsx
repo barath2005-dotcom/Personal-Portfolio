@@ -1,30 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const words = [
+  "INITIALIZING KERNEL...",
+  "LOADING ASSETS...",
+  "RENDERING 3D ENVIRONMENT...",
+  "COMPILING SHADERS...",
+  "SYSTEM READY."
+];
+
 const IntroLoader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState('loading'); // 'loading' | 'reveal' | 'exit'
+  const [phase, setPhase] = useState('loading'); // loading, reveal, exit
+  const [wordIndex, setWordIndex] = useState(0);
 
   useEffect(() => {
     let start = null;
-    const duration = 2000; // 2 seconds to load
+    const duration = 2500;
 
     const step = (timestamp) => {
       if (!start) start = timestamp;
       const elapsedTime = timestamp - start;
       const progressRatio = Math.min(elapsedTime / duration, 1);
       
-      // Easing out quintic for smooth slowing down at the end
       const easeOutQuint = 1 - Math.pow(1 - progressRatio, 5);
-      
-      setProgress(Math.floor(easeOutQuint * 100));
+      const currProgress = Math.floor(easeOutQuint * 100);
+      setProgress(currProgress);
+
+      if (currProgress > 20) setWordIndex(1);
+      if (currProgress > 50) setWordIndex(2);
+      if (currProgress > 80) setWordIndex(3);
+      if (currProgress === 100) setWordIndex(4);
 
       if (progressRatio < 1) {
         requestAnimationFrame(step);
       } else {
         setPhase('reveal');
-        setTimeout(() => setPhase('exit'), 1500);
-        setTimeout(() => onComplete(), 2500);
+        setTimeout(() => setPhase('exit'), 1800);
+        setTimeout(() => onComplete(), 3000);
       }
     };
 
@@ -35,55 +48,134 @@ const IntroLoader = ({ onComplete }) => {
     <AnimatePresence>
       {phase !== 'exit' && (
         <motion.div
-          initial={{ y: 0 }}
-          exit={{ y: '-100vh', transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] } }}
+          key="loader-wrapper"
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050608] overflow-hidden"
+          exit={{ opacity: 0, transition: { duration: 1.2, ease: [0.76, 0, 0.24, 1] } }}
         >
-          {/* Subtle glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-[#E8C48E]/10 blur-[120px] rounded-full pointer-events-none" />
+          {/* Background Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+          
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-[#E8C48E]/5 blur-[120px] pointer-events-none rounded-full" />
 
           {phase === 'loading' && (
             <motion.div 
-              key="counter"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, y: -50, filter: 'blur(10px)', transition: { duration: 0.5 } }}
-              className="relative z-10 flex flex-col items-center"
+              key="loading-ui"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)', transition: { duration: 0.8 } }}
+              className="relative z-10 w-full max-w-xs md:max-w-sm px-6 flex flex-col items-center"
             >
-              <div className="text-[12rem] leading-none font-heading font-light text-white tracking-tighter mix-blend-difference">
-                {progress.toString().padStart(3, '0')}
+              {/* Central Glowing Ring */}
+              <div className="relative w-48 h-48 flex items-center justify-center mb-12">
+                {/* Outer rotating dashed ring */}
+                <motion.svg
+                  className="absolute inset-0 w-full h-full text-[#E8C48E]/40 drop-shadow-[0_0_10px_rgba(232,196,142,0.5)]"
+                  viewBox="0 0 100 100"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                >
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 8" />
+                </motion.svg>
+                
+                {/* Inner rotating solid ring */}
+                <motion.svg
+                  className="absolute inset-2 w-[92%] h-[92%] text-[#E8C48E]/30"
+                  viewBox="0 0 100 100"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                >
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="30 10 10 10" />
+                </motion.svg>
+
+                {/* Number */}
+                <div className="absolute text-5xl font-mono font-light text-white tracking-tighter">
+                  {progress}<span className="text-2xl text-[#E8C48E]/70">%</span>
+                </div>
               </div>
-              <div className="text-[#E8C48E]/60 text-sm tracking-[0.4em] font-mono uppercase mt-4">
-                Loading Experience
+
+              {/* Status Text Box */}
+              <div className="w-full bg-white/[0.03] border border-[#E8C48E]/20 p-4 rounded-xl backdrop-blur-md relative overflow-hidden">
+                <motion.div 
+                  className="absolute left-0 top-0 bottom-0 w-1 bg-[#E8C48E]"
+                  initial={{ height: 0 }}
+                  animate={{ height: "100%" }}
+                  transition={{ duration: 0.5 }}
+                />
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-[10px] text-[#E8C48E] font-mono tracking-widest uppercase">System Status</span>
+                  <span className="text-[10px] text-white/50 font-mono">v1.0.0</span>
+                </div>
+                <div className="h-5 relative overflow-hidden text-xs text-white/80 font-mono uppercase tracking-wider">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={wordIndex}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -20, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 flex items-center"
+                    >
+                      {words[wordIndex]}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full h-1 bg-white/10 mt-6 rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-[#D4B878] to-[#E8C48E]"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
             </motion.div>
           )}
 
           {phase === 'reveal' && (
             <motion.div
-              key="name"
+              key="reveal-name"
               className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
             >
               <div className="overflow-hidden">
-                <motion.h1 
-                  initial={{ y: '100%' }}
-                  animate={{ y: '0%' }}
-                  transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
-                  className="text-6xl md:text-[8rem] font-heading font-bold gradient-gold-text tracking-tighter leading-none px-4"
+                <motion.div
+                  initial={{ y: '100%', rotateX: 90, opacity: 0 }}
+                  animate={{ y: '0%', rotateX: 0, opacity: 1 }}
+                  transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ transformPerspective: 1000 }}
+                  className="text-center"
                 >
-                  BARATH R
-                </motion.h1>
+                  <motion.h1 
+                    className="text-5xl md:text-[8rem] font-heading font-bold gradient-gold-text tracking-tight leading-none px-4"
+                  >
+                    BARATH R
+                  </motion.h1>
+                  <motion.p 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 1 }}
+                    className="text-[#E8C48E]/60 text-xs md:text-sm tracking-[0.5em] font-mono mt-4 uppercase"
+                  >
+                    Experience Activated
+                  </motion.p>
+                </motion.div>
               </div>
             </motion.div>
           )}
-
-          {/* Golden Progress Line */}
-          {phase === 'loading' && (
-            <motion.div 
-              className="absolute bottom-0 left-0 h-1 bg-[#E8C48E]"
-              animate={{ width: `${progress}%` }}
-              transition={{ ease: "linear", duration: 0.1 }}
-            />
+          
+          {/* Top/Bottom Cinematic Bars */}
+          {phase !== 'exit' && (
+            <>
+              <motion.div 
+                exit={{ y: "-100%" }}
+                transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute top-0 left-0 w-full h-[10vh] bg-[#030405] border-b border-[#E8C48E]/10 z-30 shadow-[0_10px_30px_rgba(0,0,0,0.8)]" 
+              />
+              <motion.div 
+                exit={{ y: "100%" }}
+                transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute bottom-0 left-0 w-full h-[10vh] bg-[#030405] border-t border-[#E8C48E]/10 z-30 shadow-[0_-10px_30px_rgba(0,0,0,0.8)]" 
+              />
+            </>
           )}
         </motion.div>
       )}
