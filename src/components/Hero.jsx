@@ -37,17 +37,17 @@ export default function Hero() {
               <span className="text-[#E8C48E]/80 text-sm font-mono tracking-wider uppercase">Hello, I'm</span>
             </motion.div>
             
-            <motion.h1 variants={fadeUp} className="text-6xl lg:text-8xl font-heading font-bold gradient-gold-text mb-4">
+            <motion.h1 variants={fadeUp} className="text-4xl md:text-6xl lg:text-8xl font-heading font-bold gradient-gold-text mb-4 mt-8 md:mt-0">
               BARATH R
             </motion.h1>
             
-            <motion.div variants={fadeUp} className="flex flex-col items-start gap-2 mb-6">
-              <h2 className="text-lg lg:text-xl tracking-[0.3em] font-medium text-[#E8C48E] uppercase drop-shadow-[0_0_15px_rgba(232,196,142,0.3)]">CO-FOUNDER & COO @ JUNO ROBOTICS</h2>
-              <h3 className="text-sm lg:text-base tracking-[0.4em] text-white/80 font-light uppercase mt-1">SOFTWARE ENGINEER</h3>
-              <h4 className="text-xs tracking-[0.3em] text-[#E8C48E]/50 font-light uppercase">AI & DATA SCIENCE STUDENT</h4>
+            <motion.div variants={fadeUp} className="flex flex-col items-start gap-2 mb-6 w-full">
+              <h2 className="text-xs sm:text-sm md:text-lg lg:text-xl tracking-[0.2em] md:tracking-[0.3em] font-medium text-[#E8C48E] uppercase drop-shadow-[0_0_15px_rgba(232,196,142,0.3)]">CO-FOUNDER & COO @ JUNO ROBOTICS</h2>
+              <h3 className="text-[10px] sm:text-xs md:text-sm lg:text-base tracking-[0.3em] md:tracking-[0.4em] text-white/80 font-light uppercase mt-1">SOFTWARE ENGINEER</h3>
+              <h4 className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] text-[#E8C48E]/50 font-light uppercase">AI & DATA SCIENCE STUDENT</h4>
             </motion.div>
             
-            <motion.p variants={fadeUp} className="text-white/50 text-base max-w-md leading-relaxed mt-6">
+            <motion.p variants={fadeUp} className="text-white/50 text-sm md:text-base max-w-md leading-relaxed mt-4 md:mt-6">
               {personal.heroDescription}
             </motion.p>
             
@@ -56,11 +56,11 @@ export default function Hero() {
                 hidden: { opacity: 0, y: 30 },
                 show: { opacity: 1, y: 0, transition: { type: 'spring', damping: 15, stiffness: 100, delay: 0.6 } }
               }}
-              className="flex gap-4 mt-8"
+              className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto"
             >
               <button 
                 onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-gold px-7 py-3.5 flex items-center gap-2 bg-[#E8C48E] text-[#050608] font-medium rounded-full hover:bg-white transition-colors cursor-pointer"
+                className="w-full sm:w-auto justify-center btn-gold px-7 py-3.5 flex items-center gap-2 bg-[#E8C48E] text-[#050608] font-medium rounded-full hover:bg-white transition-colors cursor-pointer"
               >
                 View Projects
                 <FiArrowUpRight />
@@ -68,7 +68,7 @@ export default function Hero() {
               <a 
                 href="/barath-resume.pdf" 
                 download="Barath_R_Resume.pdf"
-                className="btn-glass px-7 py-3.5 flex items-center gap-2 border border-[#E8C48E]/30 text-white rounded-full hover:bg-white/5 transition-colors cursor-pointer"
+                className="w-full sm:w-auto justify-center btn-glass px-7 py-3.5 flex items-center gap-2 border border-[#E8C48E]/30 text-white rounded-full hover:bg-white/5 transition-colors cursor-pointer"
               >
                 Download Resume
                 <FiDownload />

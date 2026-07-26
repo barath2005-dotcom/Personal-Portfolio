@@ -56,7 +56,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
+        <div className="hidden lg:flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
             <button
               key={link.id}
@@ -77,14 +77,14 @@ export default function Navbar() {
         </div>
 
         {/* Right Button */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <button onClick={() => scrollToSection('contact')} className="px-5 py-2 text-sm text-[#E8C48E] border border-[#E8C48E]/50 rounded-full hover:bg-[#E8C48E]/10 transition-colors">
             Let's Connect
           </button>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-white/80" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        <button className="lg:hidden text-white/80" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -97,7 +97,7 @@ export default function Navbar() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden border-t border-[rgba(232,196,142,0.12)] bg-white/[0.02]"
+          className="lg:hidden border-t border-[rgba(232,196,142,0.12)] bg-white/[0.02]"
         >
           <div className="flex flex-col py-4 px-6 gap-4">
             {navLinks.map((link) => (
