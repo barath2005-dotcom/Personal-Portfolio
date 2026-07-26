@@ -28,9 +28,7 @@ const Experience = () => {
               <div className="absolute left-[14px] lg:left-1/2 lg:-translate-x-1/2 w-3 h-3 rounded-full bg-[#E8C48E] shadow-[0_0_12px_rgba(232,196,142,0.5)]" />
               
               <div className={`ml-12 lg:ml-0 lg:w-[45%] glass-card p-6 ${i % 2 === 0 ? 'lg:pr-8' : 'lg:pl-8'}`}>
-                <span className="inline-block text-xs font-mono text-[#E8C48E] bg-[#E8C48E]/10 px-3 py-1 rounded-full">
-                  {exp.year}
-                </span>
+
                 <h3 className="font-heading text-lg font-semibold text-white mt-3">
                   {exp.role}
                 </h3>
