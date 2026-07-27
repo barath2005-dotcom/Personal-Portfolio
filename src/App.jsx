@@ -55,7 +55,7 @@ function App() {
             {showIntro && <IntroLoader key="intro" onComplete={() => setShowIntro(false)} />}
           </AnimatePresence>
 
-          <div className="relative min-h-screen bg-[#050608] text-white selection:bg-[#E8C48E]/30 selection:text-white font-body overflow-x-hidden">
+          <div className="relative min-h-screen bg-[#050608] text-white selection:bg-[#E8C48E]/30 selection:text-white font-body overflow-x-clip">
 
             {/* Full-page 3D Background Scene */}
             <Suspense fallback={null}>
