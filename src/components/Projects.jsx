@@ -20,11 +20,31 @@ const Projects = () => {
             VIEW ALL PROJECTS &rarr;
           </a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-14">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.15 }
+            }
+          }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-14"
+        >
           {featuredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <motion.div 
+              key={project.id}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+              }}
+            >
+              <ProjectCard project={project} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
