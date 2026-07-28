@@ -1,4 +1,4 @@
-import projectsImg from '../assets/images/projects.png';
+import projectsImg from '../assets/images/projects-new.png';
 
 export const projects = [
   {
@@ -8,11 +8,11 @@ export const projects = [
     tech: ['HTML', 'CSS', 'JavaScript', 'React', 'Vercel'],
     category: 'Web Development',
     github: 'https://github.com/barath2005-dotcom',
-    demo: 'https://juno-robotics.vercel.app/', // Placeholders if they have one, leaving null if not
+    demo: 'https://junorobotics.in/', 
     featured: true,
     status: 'completed',
     image: projectsImg,
-    imagePosition: '0% 10%'
+    imagePosition: '0% 15%'
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const projects = [
     featured: true,
     status: 'completed',
     image: projectsImg,
-    imagePosition: '50% 10%'
+    imagePosition: '50% 15%'
   },
   {
     id: 3,
@@ -38,6 +38,6 @@ export const projects = [
     featured: true,
     status: 'completed',
     image: projectsImg,
-    imagePosition: '100% 10%'
+    imagePosition: '100% 15%'
   }
 ];
