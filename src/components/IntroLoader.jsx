@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import dragonTexture from '../assets/images/dragon-texture.jpg';
 
 const words = [
   "INITIALIZING KERNEL...",
@@ -136,24 +137,45 @@ const IntroLoader = ({ onComplete }) => {
               key="reveal-name"
               className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
             >
-              <div className="overflow-hidden">
+              {/* Screen flash on impact */}
+              <motion.div 
+                className="absolute inset-0 bg-red-900/30 mix-blend-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+              />
+
+              <div className="relative">
                 <motion.div
-                  initial={{ y: '100%', rotateX: 90, opacity: 0 }}
-                  animate={{ y: '0%', rotateX: 0, opacity: 1 }}
-                  transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ transformPerspective: 1000 }}
+                  initial={{ scale: 15, opacity: 0, filter: 'blur(30px)' }}
+                  animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+                  transition={{ duration: 0.2, ease: "easeIn" }}
                   className="text-center"
                 >
-                  <motion.h1 
-                    className="text-5xl md:text-[8rem] font-heading font-bold gradient-gold-text tracking-tight leading-none px-4"
+                  {/* Screen shake on impact */}
+                  <motion.div
+                    animate={{ x: [0, -15, 15, -10, 10, -5, 5, 0], y: [0, 15, -15, 10, -10, 5, -5, 0] }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
                   >
-                    BARATH R
-                  </motion.h1>
+                    <motion.h1 
+                      className="text-6xl md:text-[10rem] font-heading font-black tracking-tighter leading-none px-4"
+                      style={{
+                        backgroundImage: `url(${dragonTexture})`,
+                        backgroundSize: '120% auto',
+                        backgroundPosition: 'center',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        filter: 'drop-shadow(0px 0px 40px rgba(220, 20, 20, 0.6))'
+                      }}
+                    >
+                      BARATH R
+                    </motion.h1>
+                  </motion.div>
                   <motion.p 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 1 }}
-                    className="text-[#E8C48E]/60 text-xs md:text-sm tracking-[0.5em] font-mono mt-4 uppercase"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                    className="text-red-500/80 text-sm md:text-lg tracking-[0.6em] font-mono mt-6 uppercase font-bold drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
                   >
                     Experience Activated
                   </motion.p>
