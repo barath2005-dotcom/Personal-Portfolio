@@ -36,8 +36,8 @@ const IntroLoader = ({ onComplete }) => {
         requestAnimationFrame(step);
       } else {
         setPhase('reveal');
-        setTimeout(() => setPhase('exit'), 1800);
-        setTimeout(() => onComplete(), 3000);
+        setTimeout(() => setPhase('exit'), 4500);
+        setTimeout(() => onComplete(), 6000);
       }
     };
 
@@ -136,28 +136,91 @@ const IntroLoader = ({ onComplete }) => {
               key="reveal-name"
               className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
             >
-              <div className="overflow-hidden">
+              {/* Slow red ambient pulse */}
+              <motion.div 
+                className="absolute inset-0"
+                initial={{ background: 'radial-gradient(circle, transparent 60%, transparent 100%)' }}
+                animate={{ background: [
+                  'radial-gradient(circle, rgba(139,0,0,0) 60%, rgba(0,0,0,0) 100%)',
+                  'radial-gradient(circle, rgba(139,0,0,0.15) 40%, rgba(0,0,0,0) 100%)',
+                  'radial-gradient(circle, rgba(139,0,0,0.25) 30%, rgba(50,0,0,0.1) 100%)'
+                ] }}
+                transition={{ duration: 3, delay: 0.8, ease: 'easeInOut' }}
+              />
+
+              <div className="relative text-center">
+                {/* Main name - starts gold, stays visible underneath */}
                 <motion.div
-                  initial={{ y: '100%', rotateX: 90, opacity: 0 }}
-                  animate={{ y: '0%', rotateX: 0, opacity: 1 }}
+                  initial={{ scale: 1.5, opacity: 0, filter: 'blur(10px)' }}
+                  animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
                   transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ transformPerspective: 1000 }}
-                  className="text-center"
+                  className="relative"
                 >
-                  <motion.h1 
-                    className="text-5xl md:text-[8rem] font-heading font-bold gradient-gold-text tracking-tight leading-none px-4"
+                  <h1 
+                    className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4 gradient-gold-text"
                   >
                     BARATH R
-                  </motion.h1>
-                  <motion.p 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 1 }}
-                    className="text-[#E8C48E]/60 text-xs md:text-sm tracking-[0.5em] font-mono mt-4 uppercase"
+                  </h1>
+
+                  {/* Blood layer - clips from top to bottom slowly */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ clipPath: 'inset(0 0 100% 0)' }}
+                    animate={{ clipPath: 'inset(0 0 0% 0)' }}
+                    transition={{ duration: 3, delay: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
                   >
-                    Experience Activated
-                  </motion.p>
+                    <h1 
+                      className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4"
+                      style={{
+                        background: 'linear-gradient(180deg, #8B0000 0%, #DC143C 30%, #B22222 50%, #8B0000 70%, #4A0000 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        filter: 'drop-shadow(0 0 30px rgba(139, 0, 0, 0.8)) drop-shadow(0 0 60px rgba(220, 20, 60, 0.4))'
+                      }}
+                    >
+                      BARATH R
+                    </h1>
+                  </motion.div>
+
+                  {/* Blood drip elements */}
+                  {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute"
+                      style={{
+                        left: `${12 + i * 12}%`,
+                        top: '85%',
+                        width: `${3 + Math.random() * 4}px`,
+                      }}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: `${30 + i * 10}px`, opacity: [0, 0.9, 0.7] }}
+                      transition={{ 
+                        duration: 2.5 + i * 0.3, 
+                        delay: 2.0 + i * 0.25, 
+                        ease: [0.45, 0, 0.55, 1] 
+                      }}
+                    >
+                      <div 
+                        className="w-full h-full rounded-b-full"
+                        style={{
+                          background: 'linear-gradient(180deg, #8B0000, #DC143C 40%, #B22222 80%, #8B0000)',
+                          boxShadow: '0 4px 15px rgba(139, 0, 0, 0.6)'
+                        }}
+                      />
+                    </motion.div>
+                  ))}
                 </motion.div>
+
+                {/* Subtitle with blood theme */}
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.5, duration: 1.2, ease: 'easeOut' }}
+                  className="text-xs md:text-sm tracking-[0.5em] font-mono mt-8 uppercase"
+                  style={{ color: 'rgba(220, 20, 60, 0.6)' }}
+                >
+                  Experience Activated
+                </motion.p>
               </div>
             </motion.div>
           )}
