@@ -2,71 +2,54 @@ import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const GoldParticles = () => {
+const GoldParticles = ({ count = 200 }) => {
   const meshRef = useRef();
-  const count = 500;
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  // Generate particles
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * 60;
-      const y = (Math.random() - 0.5) * 60;
-      const z = (Math.random() - 0.5) * 80;
-      
-      const speed = 0.1 + Math.random() * 0.2;
-      const factor = 0.5 + Math.random() * 2;
-      const xSpeed = (Math.random() - 0.5) * 0.1;
-      const ySpeed = (Math.random() - 0.5) * 0.1;
-      
-      // varying sizes
-      const size = Math.random() > 0.9 ? 1.5 + Math.random() * 2 : 0.3 + Math.random() * 0.7;
+      const x = (Math.random() - 0.5) * 30;
+      const y = (Math.random() - 0.5) * 30;
+      const z = (Math.random() - 0.5) * 20;
+      const scale = 0.01 + Math.random() * 0.02;
+      const speed = 0.5 + Math.random() * 1.5;
+      const offset = Math.random() * Math.PI * 2;
 
-      temp.push({
-        t: Math.random() * 100,
-        factor,
-        speed,
-        x,
-        y,
-        z,
-        xSpeed,
-        ySpeed,
-        size
-      });
+      temp.push({ x, y, z, scale, speed, offset });
     }
     return temp;
   }, [count]);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    
+    const time = state.clock.elapsedTime;
+    
     particles.forEach((particle, i) => {
-      let { t, factor, speed, x, y, z, xSpeed, ySpeed, size } = particle;
+      const { x, y, z, scale, speed, offset } = particle;
+      
+      const px = x + Math.sin(time * speed + offset) * 0.5;
+      const py = y + Math.cos(time * speed + offset) * 0.5;
+      const pz = z + Math.sin(time * speed * 0.5 + offset) * 0.3;
+      
+      // Pulse scale
+      const currentScale = scale * (1 + Math.sin(time * 2 + offset) * 0.2);
 
-      t = particle.t += delta * speed;
-      
-      // flowing stream motion
-      const currentX = x + Math.cos(t * 0.5) * factor;
-      const currentY = y + Math.sin(t * 0.5) * factor;
-      const currentZ = z + Math.sin(t * 0.2) * factor * 2;
-
-      dummy.position.set(currentX, currentY, currentZ);
-      
-      // optional slow drift
-      particle.x += xSpeed * delta;
-      particle.y += ySpeed * delta;
-      
-      dummy.scale.set(size, size, size);
+      dummy.position.set(px, py, pz);
+      dummy.scale.set(currentScale, currentScale, currentScale);
       dummy.updateMatrix();
       
       meshRef.current.setMatrixAt(i, dummy.matrix);
     });
+    
     meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
     <instancedMesh ref={meshRef} args={[null, null, count]}>
-      <sphereGeometry args={[0.05, 8, 8]} />
-      <meshBasicMaterial color="#E8C48E" transparent opacity={0.6} />
+      <sphereGeometry args={[1, 6, 6]} />
+      <meshBasicMaterial color="#E8C48E" transparent opacity={0.4} />
     </instancedMesh>
   );
 };
