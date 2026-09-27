@@ -1,347 +1,234 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
+import { Float, Line, Sphere, Grid, Trail } from '@react-three/drei';
 import * as THREE from 'three';
 
-const GlassCube = () => {
+// A. Animated Wireframe Sphere (Hero centerpiece)
+const HeroSphere = () => {
   const meshRef = useRef();
+  
   useFrame((state, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2;
-      meshRef.current.rotation.y += delta * 0.3;
-    }
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1} position={[-6, 2, 5]}>
-      <mesh ref={meshRef}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshPhysicalMaterial roughness={0.02} metalness={0.1} transmission={0.95} thickness={0.5} transparent opacity={0.6} color="#ffffff" clearcoat={1} clearcoatRoughness={0.1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const MetallicRing = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.15;
       meshRef.current.rotation.y += delta * 0.1;
+      meshRef.current.rotation.x += delta * 0.05;
+      
+      // subtle pulsing scale
+      const scale = 1 + Math.sin(state.clock.elapsedTime) * 0.02;
+      meshRef.current.scale.set(scale, scale, scale);
     }
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1.2} position={[5, 3, 2]}>
+    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} position={[0, 0, 2]}>
       <mesh ref={meshRef}>
-        <torusGeometry args={[1.2, 0.08, 32, 64]} />
-        <meshStandardMaterial color="#E8C48E" roughness={0.05} metalness={1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const MetallicRing2 = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x -= delta * 0.2;
-      meshRef.current.rotation.y -= delta * 0.15;
-    }
-  });
-
-  return (
-    <Float speed={2.5} rotationIntensity={0.6} floatIntensity={0.8} position={[-4, -1, -2]}>
-      <mesh ref={meshRef} scale={0.6}>
-        <torusGeometry args={[1.2, 0.08, 32, 64]} />
-        <meshStandardMaterial color="#E8C48E" roughness={0.05} metalness={1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const FloatingSphere = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.5;
-    }
-  });
-
-  return (
-    <Float speed={3} rotationIntensity={0.3} floatIntensity={1.5} position={[7, 1, -5]}>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[0.4, 32, 32]} />
-        <meshStandardMaterial color="#D4B878" roughness={0.02} metalness={1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const FloatingSphere2 = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y -= delta * 0.4;
-    }
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={0.4} floatIntensity={1} position={[-7, -2, -8]}>
-      <mesh ref={meshRef} scale={0.5}>
-        <sphereGeometry args={[0.4, 32, 32]} />
-        <meshStandardMaterial color="#D4B878" roughness={0.02} metalness={1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const AcrylicPanel = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.1;
-      meshRef.current.rotation.y += delta * 0.05;
-    }
-  });
-
-  return (
-    <Float speed={1} rotationIntensity={0.3} floatIntensity={0.5} position={[-3, -2, -12]}>
-      <mesh ref={meshRef}>
-        <boxGeometry args={[3, 2, 0.02]} />
-        <meshPhysicalMaterial transmission={0.9} roughness={0.05} color="#ffffff" transparent opacity={0.3} clearcoat={1} clearcoatRoughness={0.1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const AcrylicPanel2 = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x -= delta * 0.08;
-      meshRef.current.rotation.y -= delta * 0.12;
-    }
-  });
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.6} position={[4, -3, -15]}>
-      <mesh ref={meshRef} rotation={[0, Math.PI / 4, 0]}>
-        <boxGeometry args={[3, 2, 0.02]} />
-        <meshPhysicalMaterial transmission={0.8} roughness={0.1} color="#ffffff" transparent opacity={0.1} />
-      </mesh>
-    </Float>
-  );
-};
-
-const GoldenLightStrip = () => {
-  return (
-    <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5} position={[8, 0, -18]}>
-      <mesh rotation={[0, 0, Math.PI / 8]}>
-        <boxGeometry args={[0.02, 3, 0.02]} />
-        <meshBasicMaterial color="#E8C48E" transparent opacity={0.6} />
-      </mesh>
-    </Float>
-  );
-};
-
-const GoldenLightStrip2 = () => {
-  return (
-    <Float speed={1.8} rotationIntensity={0.2} floatIntensity={0.6} position={[-8, 1, -20]}>
-      <mesh rotation={[0, 0, -Math.PI / 6]}>
-        <boxGeometry args={[0.02, 3, 0.02]} />
-        <meshBasicMaterial color="#E8C48E" transparent opacity={0.6} />
-      </mesh>
-    </Float>
-  );
-};
-
-const FloatingIcosahedron = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.15;
-      meshRef.current.rotation.y += delta * 0.25;
-    }
-  });
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1} position={[4, 5, -25]}>
-      <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.5, 0]} />
-        <meshPhysicalMaterial 
-          color="#ffffff" 
-          transmission={1} 
-          opacity={1} 
+        <icosahedronGeometry args={[2.5, 2]} />
+        <meshBasicMaterial 
+          color="#E8C48E" 
+          wireframe 
           transparent 
-          roughness={0.1} 
-          thickness={1} 
-          ior={1.5}
-          metalness={0.1}
-          clearcoat={1}
-        />
-        <lineSegments>
-          <edgesGeometry attach="geometry" args={[new THREE.IcosahedronGeometry(1.5, 0)]} />
-          <lineBasicMaterial attach="material" color="#E8C48E" transparent opacity={0.2} />
-        </lineSegments>
-      </mesh>
-    </Float>
-  );
-};
-
-const GoldDiamond = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y -= delta * 0.4;
-      meshRef.current.rotation.z += delta * 0.1;
-    }
-  });
-
-  return (
-    <Float speed={2.5} rotationIntensity={1} floatIntensity={1.5} position={[-8, 4, -28]}>
-      <mesh ref={meshRef} scale={0.7}>
-        <octahedronGeometry args={[1, 0]} />
-        <meshStandardMaterial color="#E8C48E" roughness={0.1} metalness={1} envMapIntensity={2} />
-      </mesh>
-    </Float>
-  );
-};
-
-const GlassCylinder = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2;
-      meshRef.current.rotation.z -= delta * 0.15;
-    }
-  });
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.8} position={[6, -4, -30]}>
-      <mesh ref={meshRef} rotation={[Math.PI / 4, 0, 0]}>
-        <cylinderGeometry args={[0.5, 0.5, 2, 32]} />
-        <meshPhysicalMaterial 
-          transmission={0.9} 
-          roughness={0.05} 
-          color="#ffffff" 
-          transparent 
-          opacity={0.4} 
-          clearcoat={1} 
-          metalness={0.2}
+          opacity={0.15}
         />
       </mesh>
+      {/* Inner glowing core */}
+      <mesh>
+        <sphereGeometry args={[1.8, 32, 32]} />
+        <meshBasicMaterial color="#E8C48E" transparent opacity={0.02} />
+      </mesh>
     </Float>
   );
 };
 
-const GoldTorusKnot = () => {
-  const meshRef = useRef();
+// C. Geometric Grid Floor
+const FloorGrid = () => {
+  return (
+    <Grid 
+      position={[0, -5, -10]} 
+      args={[100, 100]} 
+      cellSize={2} 
+      cellThickness={1} 
+      cellColor="#C5A059" 
+      sectionSize={10} 
+      sectionThickness={1.5} 
+      sectionColor="#E8C48E" 
+      fadeDistance={40} 
+      fadeStrength={2}
+      transparent
+      opacity={0.1}
+    />
+  );
+};
+
+// D. Orbiting Satellite Objects
+const Satellites = () => {
+  const groupRef = useRef();
+  
   useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x -= delta * 0.2;
-      meshRef.current.rotation.y += delta * 0.15;
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.2;
+      groupRef.current.rotation.z += delta * 0.1;
     }
   });
 
   return (
-    <Float speed={2} rotationIntensity={1.5} floatIntensity={1} position={[-5, -4, -35]}>
-      <mesh ref={meshRef} scale={0.5}>
-        <torusKnotGeometry args={[1, 0.3, 100, 16]} />
+    <group ref={groupRef} position={[4, 2, -5]}>
+      {/* Center point of orbit */}
+      <mesh>
+        <octahedronGeometry args={[0.2, 0]} />
         <meshStandardMaterial color="#E8C48E" roughness={0.1} metalness={1} />
       </mesh>
-    </Float>
+      
+      {/* Orbiting object 1 */}
+      <mesh position={[2, 0, 0]}>
+        <icosahedronGeometry args={[0.3, 0]} />
+        <meshStandardMaterial color="#D4B878" roughness={0.2} metalness={0.8} />
+      </mesh>
+      
+      {/* Orbiting object 2 */}
+      <mesh position={[-1, 1.5, 0]}>
+        <octahedronGeometry args={[0.25, 0]} />
+        <meshStandardMaterial color="#C5A059" roughness={0.1} metalness={1} />
+      </mesh>
+
+      {/* Orbiting object 3 */}
+      <mesh position={[0, -2, 1]}>
+        <tetrahedronGeometry args={[0.3, 0]} />
+        <meshStandardMaterial color="#E8C48E" roughness={0.3} metalness={0.9} />
+      </mesh>
+
+      {/* Connection lines */}
+      <Line points={[[0,0,0], [2,0,0]]} color="#E8C48E" lineWidth={1} transparent opacity={0.3} />
+      <Line points={[[0,0,0], [-1,1.5,0]]} color="#E8C48E" lineWidth={1} transparent opacity={0.3} />
+      <Line points={[[0,0,0], [0,-2,1]]} color="#E8C48E" lineWidth={1} transparent opacity={0.3} />
+    </group>
   );
 };
 
-const GlassPyramid = () => {
-  const meshRef = useRef();
+// E. DNA/Helix Structure
+const Helix = () => {
+  const groupRef = useRef();
+  
+  const helixPoints = useMemo(() => {
+    const points = [];
+    const points2 = [];
+    for(let i=0; i<40; i++) {
+      const t = i * 0.3;
+      const x = Math.sin(t) * 1.5;
+      const z = Math.cos(t) * 1.5;
+      const y = i * 0.4 - 8;
+      points.push(new THREE.Vector3(x, y, z));
+      points2.push(new THREE.Vector3(-x, y, -z));
+    }
+    return { points, points2 };
+  }, []);
+
   useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.3;
-      meshRef.current.rotation.z -= delta * 0.1;
+    if (groupRef.current) {
+      groupRef.current.rotation.y -= delta * 0.3;
     }
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1.5} position={[9, -2, -38]}>
-      <mesh ref={meshRef}>
-        <coneGeometry args={[1, 1.5, 4]} />
+    <group ref={groupRef} position={[-6, 0, -15]} rotation={[0.2, 0, 0.2]}>
+      {helixPoints.points.map((p, i) => (
+        <React.Fragment key={`helix-${i}`}>
+          <mesh position={p}>
+            <sphereGeometry args={[0.1, 16, 16]} />
+            <meshBasicMaterial color="#E8C48E" />
+          </mesh>
+          <mesh position={helixPoints.points2[i]}>
+            <sphereGeometry args={[0.1, 16, 16]} />
+            <meshBasicMaterial color="#D4B878" />
+          </mesh>
+          {/* Rungs */}
+          <Line points={[p, helixPoints.points2[i]]} color="#C5A059" lineWidth={1} transparent opacity={0.4} />
+        </React.Fragment>
+      ))}
+      <Line points={helixPoints.points} color="#E8C48E" lineWidth={2} transparent opacity={0.5} />
+      <Line points={helixPoints.points2} color="#E8C48E" lineWidth={2} transparent opacity={0.5} />
+    </group>
+  );
+};
+
+// F. Floating Holographic Panels
+const HolographicPanel = ({ position, rotation, speed = 1, size = [3, 4] }) => {
+  const meshRef = useRef();
+  
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.position.y += Math.sin(state.clock.elapsedTime * speed) * 0.005;
+      meshRef.current.rotation.y += delta * 0.05 * speed;
+    }
+  });
+
+  return (
+    <Float floatIntensity={2} speed={speed}>
+      <mesh ref={meshRef} position={position} rotation={rotation}>
+        <planeGeometry args={[size[0], size[1], 10, 10]} />
         <meshPhysicalMaterial 
-          transmission={0.95} 
-          roughness={0.02} 
-          color="#ffffff" 
-          transparent 
-          opacity={0.5} 
-          clearcoat={1} 
-          metalness={0.1}
+          color="#E8C48E"
+          transmission={0.9}
+          opacity={0.1}
+          transparent
+          wireframe
+          roughness={0.1}
+          metalness={0.5}
         />
       </mesh>
     </Float>
   );
 };
 
-const WireframeDodecahedron = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.1;
-      meshRef.current.rotation.y -= delta * 0.2;
+// Neural Data Streams (Curved Lines)
+const DataStreams = () => {
+  const curves = useMemo(() => {
+    const lines = [];
+    for(let i=0; i<5; i++) {
+      const points = [];
+      const startX = (Math.random() - 0.5) * 20;
+      const startY = (Math.random() - 0.5) * 20;
+      const startZ = -20 - Math.random() * 20;
+      
+      for(let j=0; j<10; j++) {
+        points.push(new THREE.Vector3(
+          startX + Math.sin(j) * 4,
+          startY + Math.cos(j) * 4,
+          startZ + j * 5
+        ));
+      }
+      const curve = new THREE.CatmullRomCurve3(points);
+      lines.push(curve.getPoints(50));
     }
-  });
+    return lines;
+  }, []);
 
   return (
-    <Float speed={1} rotationIntensity={1} floatIntensity={0.5} position={[-2, 6, -40]}>
-      <mesh ref={meshRef}>
-        <dodecahedronGeometry args={[1.5, 0]} />
-        <meshBasicMaterial color="#E8C48E" wireframe transparent opacity={0.15} />
-      </mesh>
-    </Float>
-  );
-};
-
-const GoldCoin = () => {
-  const meshRef = useRef();
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.5;
-      meshRef.current.rotation.y += delta * 0.3;
-    }
-  });
-
-  return (
-    <Float speed={2.5} rotationIntensity={2} floatIntensity={1.2} position={[2, -6, -42]}>
-      <mesh ref={meshRef} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.6, 0.6, 0.05, 32]} />
-        <meshStandardMaterial color="#D4B878" roughness={0.1} metalness={1} />
-      </mesh>
-    </Float>
+    <group>
+      {curves.map((pts, idx) => (
+        <Line key={idx} points={pts} color="#E8C48E" lineWidth={1} transparent opacity={0.15} />
+      ))}
+    </group>
   );
 };
 
 const FloatingObjects = () => {
   return (
     <group>
-      <GlassCube />
-      <MetallicRing />
-      <MetallicRing2 />
-      <FloatingSphere />
-      <FloatingSphere2 />
-      <AcrylicPanel />
-      <AcrylicPanel2 />
-      <GoldenLightStrip />
-      <GoldenLightStrip2 />
+      <HeroSphere />
+      <FloorGrid />
+      <Satellites />
+      <Satellites />
       
-      {/* New Premium Objects */}
-      <FloatingIcosahedron />
-      <GoldDiamond />
-      <GlassCylinder />
+      <group position={[-8, -3, -10]}>
+         <Satellites />
+      </group>
       
-      {/* Even More Objects */}
-      <GoldTorusKnot />
-      <GlassPyramid />
-      <WireframeDodecahedron />
-      <GoldCoin />
+      <Helix />
+      
+      <HolographicPanel position={[6, 0, -8]} rotation={[0, -Math.PI/4, 0]} speed={0.8} />
+      <HolographicPanel position={[-5, 2, -12]} rotation={[0, Math.PI/6, 0]} size={[4, 2]} speed={1.2} />
+      <HolographicPanel position={[2, -4, -20]} rotation={[Math.PI/8, 0, 0]} size={[5, 3]} speed={0.5} />
+      
+      <DataStreams />
     </group>
   );
 };
