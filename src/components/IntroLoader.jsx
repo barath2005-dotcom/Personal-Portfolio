@@ -9,6 +9,119 @@ const words = [
   "SYSTEM READY."
 ];
 
+// Pre-computed drip data for realistic blood drips
+const DRIPS = [
+  { left: '8%', w: 5, h: 70, delay: 1.8, dur: 3.0 },
+  { left: '16%', w: 7, h: 95, delay: 2.1, dur: 3.5 },
+  { left: '24%', w: 4, h: 50, delay: 2.6, dur: 2.8 },
+  { left: '33%', w: 6, h: 85, delay: 1.9, dur: 3.3 },
+  { left: '42%', w: 8, h: 120, delay: 2.3, dur: 4.0 },
+  { left: '50%', w: 5, h: 60, delay: 2.8, dur: 2.7 },
+  { left: '58%', w: 7, h: 100, delay: 2.0, dur: 3.6 },
+  { left: '66%', w: 4, h: 45, delay: 3.0, dur: 2.5 },
+  { left: '74%', w: 6, h: 80, delay: 2.2, dur: 3.2 },
+  { left: '82%', w: 5, h: 65, delay: 2.5, dur: 2.9 },
+  { left: '91%', w: 4, h: 55, delay: 2.7, dur: 3.1 },
+];
+
+// Pre-computed splatter positions
+const SPLATTERS = [
+  { left: '12%', top: '76%', size: 8, delay: 3.2 },
+  { left: '25%', top: '82%', size: 5, delay: 3.5 },
+  { left: '40%', top: '79%', size: 10, delay: 3.0 },
+  { left: '53%', top: '84%', size: 6, delay: 3.8 },
+  { left: '68%', top: '74%', size: 9, delay: 3.1 },
+  { left: '77%', top: '80%', size: 7, delay: 3.6 },
+  { left: '88%', top: '77%', size: 8, delay: 3.3 },
+  { left: '20%', top: '88%', size: 4, delay: 3.9 },
+  { left: '60%', top: '86%', size: 5, delay: 4.0 },
+];
+
+const BloodDrip = ({ left, w, h, delay, dur, index }) => (
+  <motion.div
+    className="absolute overflow-visible"
+    style={{ left, top: '80%', width: w + 6 }}
+    initial={{ height: 0, opacity: 0 }}
+    animate={{ height: h, opacity: 1 }}
+    transition={{ duration: dur, delay, ease: [0.45, 0.05, 0.55, 0.95] }}
+  >
+    <svg 
+      width="100%" 
+      height="100%" 
+      viewBox={`0 0 ${w + 6} ${h}`} 
+      preserveAspectRatio="none"
+      style={{ overflow: 'visible' }}
+    >
+      <defs>
+        <linearGradient id={`bgrad${index}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#4a0000" />
+          <stop offset="20%" stopColor="#8B0000" />
+          <stop offset="50%" stopColor="#AA0000" />
+          <stop offset="80%" stopColor="#CC1111" />
+          <stop offset="100%" stopColor="#8B0000" />
+        </linearGradient>
+        <filter id={`bglow${index}`}>
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      {/* Main drip body with bulbous tip */}
+      <path 
+        d={`M${(w+6)/2 - w/2} 0 
+            L${(w+6)/2 + w/2} 0 
+            Q${(w+6)/2 + w/2 + 1} ${h*0.5} ${(w+6)/2 + w/2 - 1} ${h*0.75}
+            Q${(w+6)/2 + w/2 + 2} ${h*0.9} ${(w+6)/2} ${h + w}
+            Q${(w+6)/2 - w/2 - 2} ${h*0.9} ${(w+6)/2 - w/2 + 1} ${h*0.75}
+            Q${(w+6)/2 - w/2 - 1} ${h*0.5} ${(w+6)/2 - w/2} 0 Z`}
+        fill={`url(#bgrad${index})`}
+        filter={`url(#bglow${index})`}
+      />
+      {/* Wet highlight reflection */}
+      <ellipse
+        cx={(w+6)/2}
+        cy={h * 0.4}
+        rx={w * 0.2}
+        ry={h * 0.08}
+        fill="rgba(255,100,100,0.15)"
+      />
+    </svg>
+  </motion.div>
+);
+
+const BloodSplatter = ({ left, top, size, delay }) => (
+  <motion.div
+    className="absolute"
+    style={{ left, top }}
+    initial={{ scale: 0, opacity: 0 }}
+    animate={{ scale: [0, 1.8, 1], opacity: [0, 1, 0.7] }}
+    transition={{ duration: 0.5, delay, ease: 'easeOut' }}
+  >
+    <div 
+      style={{
+        width: size, 
+        height: size,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle at 35% 35%, #CC1111 0%, #8B0000 60%, #4a0000 100%)',
+        boxShadow: '0 0 8px rgba(139,0,0,0.8), 0 0 20px rgba(139,0,0,0.3)',
+      }}
+    />
+    {/* Tiny satellite splatters */}
+    <div style={{
+      position: 'absolute', left: size * 1.2, top: -size * 0.3,
+      width: size * 0.3, height: size * 0.3, borderRadius: '50%',
+      background: '#8B0000',
+    }} />
+    <div style={{
+      position: 'absolute', left: -size * 0.5, top: size * 0.8,
+      width: size * 0.25, height: size * 0.25, borderRadius: '50%',
+      background: '#6B0000',
+    }} />
+  </motion.div>
+);
+
 const IntroLoader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState('loading'); // loading, reveal, exit
@@ -36,8 +149,8 @@ const IntroLoader = ({ onComplete }) => {
         requestAnimationFrame(step);
       } else {
         setPhase('reveal');
-        setTimeout(() => setPhase('exit'), 4500);
-        setTimeout(() => onComplete(), 6000);
+        setTimeout(() => setPhase('exit'), 5000);
+        setTimeout(() => onComplete(), 6500);
       }
     };
 
@@ -136,88 +249,116 @@ const IntroLoader = ({ onComplete }) => {
               key="reveal-name"
               className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
             >
-              {/* Slow red ambient pulse */}
+              {/* Dark blood-red ambient glow */}
               <motion.div 
                 className="absolute inset-0"
-                initial={{ background: 'radial-gradient(circle, transparent 60%, transparent 100%)' }}
-                animate={{ background: [
-                  'radial-gradient(circle, rgba(139,0,0,0) 60%, rgba(0,0,0,0) 100%)',
-                  'radial-gradient(circle, rgba(139,0,0,0.15) 40%, rgba(0,0,0,0) 100%)',
-                  'radial-gradient(circle, rgba(139,0,0,0.25) 30%, rgba(50,0,0,0.1) 100%)'
-                ] }}
-                transition={{ duration: 3, delay: 0.8, ease: 'easeInOut' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2.5, delay: 0.5 }}
+                style={{ background: 'radial-gradient(ellipse at center, rgba(80,0,0,0.35) 0%, rgba(30,0,0,0.15) 50%, transparent 80%)' }}
+              />
+
+              {/* Screen flash on blood impact */}
+              <motion.div 
+                className="absolute inset-0"
+                style={{ background: 'radial-gradient(circle, rgba(139,0,0,0.5) 0%, rgba(60,0,0,0.3) 100%)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0, 0.6, 0, 0.3, 0.1] }}
+                transition={{ duration: 2.5, delay: 0.8, times: [0, 0.3, 0.35, 0.5, 0.55, 1] }}
               />
 
               <div className="relative text-center">
-                {/* Main name - starts gold, stays visible underneath */}
+                {/* Name - appears white first */}
                 <motion.div
-                  initial={{ scale: 1.5, opacity: 0, filter: 'blur(10px)' }}
-                  animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-                  transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                  initial={{ scale: 1.3, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   className="relative"
                 >
-                  <h1 
-                    className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4 gradient-gold-text"
-                  >
+                  <h1 className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4 text-white/90">
                     BARATH R
                   </h1>
 
-                  {/* Blood layer - clips from top to bottom slowly */}
+                  {/* Blood covering layer 1 - irregular wavy edge, slow motion */}
                   <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
-                    initial={{ clipPath: 'inset(0 0 100% 0)' }}
-                    animate={{ clipPath: 'inset(0 0 0% 0)' }}
-                    transition={{ duration: 3, delay: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+                    className="absolute inset-0"
+                    initial={{ clipPath: 'polygon(0% 0%, 8% 0%, 16% 0%, 24% 0%, 32% 0%, 40% 0%, 48% 0%, 56% 0%, 64% 0%, 72% 0%, 80% 0%, 88% 0%, 100% 0%, 100% 0%, 0% 0%)' }}
+                    animate={{ clipPath: 'polygon(0% 0%, 8% 0%, 16% 0%, 24% 0%, 32% 0%, 40% 0%, 48% 0%, 56% 0%, 64% 0%, 72% 0%, 80% 0%, 88% 0%, 100% 0%, 100% 115%, 0% 108%)' }}
+                    transition={{ duration: 3.5, delay: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
                   >
                     <h1 
                       className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4"
                       style={{
-                        background: 'linear-gradient(180deg, #8B0000 0%, #DC143C 30%, #B22222 50%, #8B0000 70%, #4A0000 100%)',
+                        background: 'linear-gradient(180deg, #2a0000 0%, #5a0000 10%, #8B0000 25%, #AA0000 40%, #CC1111 55%, #AA0000 65%, #8B0000 75%, #5a0000 90%, #2a0000 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
-                        filter: 'drop-shadow(0 0 30px rgba(139, 0, 0, 0.8)) drop-shadow(0 0 60px rgba(220, 20, 60, 0.4))'
+                        filter: 'drop-shadow(0 2px 6px rgba(139,0,0,0.9)) drop-shadow(0 0 35px rgba(180,0,0,0.6)) drop-shadow(0 8px 20px rgba(100,0,0,0.8))',
                       }}
                     >
                       BARATH R
                     </h1>
                   </motion.div>
 
-                  {/* Blood drip elements */}
-                  {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute"
+                  {/* Blood covering layer 2 - deeper shade, slightly different timing for viscous depth */}
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{ mixBlendMode: 'multiply', opacity: 0.5 }}
+                    initial={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 75% 0%, 50% 0%, 25% 0%, 0% 0%)' }}
+                    animate={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 110%, 75% 102%, 50% 112%, 25% 105%, 0% 108%)' }}
+                    transition={{ duration: 4.0, delay: 1.3, ease: [0.22, 0.61, 0.36, 1] }}
+                  >
+                    <h1 
+                      className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4"
                       style={{
-                        left: `${12 + i * 12}%`,
-                        top: '85%',
-                        width: `${3 + Math.random() * 4}px`,
-                      }}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: `${30 + i * 10}px`, opacity: [0, 0.9, 0.7] }}
-                      transition={{ 
-                        duration: 2.5 + i * 0.3, 
-                        delay: 2.0 + i * 0.25, 
-                        ease: [0.45, 0, 0.55, 1] 
+                        background: 'linear-gradient(175deg, #4a0000 0%, #8B0000 30%, #DC143C 50%, #AA0000 70%, #660000 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
                       }}
                     >
-                      <div 
-                        className="w-full h-full rounded-b-full"
-                        style={{
-                          background: 'linear-gradient(180deg, #8B0000, #DC143C 40%, #B22222 80%, #8B0000)',
-                          boxShadow: '0 4px 15px rgba(139, 0, 0, 0.6)'
-                        }}
-                      />
-                    </motion.div>
+                      BARATH R
+                    </h1>
+                  </motion.div>
+
+                  {/* Wet sheen layer - subtle highlight */}
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{ mixBlendMode: 'screen', opacity: 0 }}
+                    animate={{ opacity: [0, 0, 0.12, 0.08] }}
+                    transition={{ duration: 3, delay: 2.5 }}
+                  >
+                    <h1 
+                      className="text-5xl md:text-[8rem] font-heading font-black tracking-tighter leading-none px-4"
+                      style={{
+                        background: 'linear-gradient(135deg, transparent 30%, rgba(255,150,150,0.4) 50%, transparent 70%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}
+                    >
+                      BARATH R
+                    </h1>
+                  </motion.div>
+
+                  {/* SVG Blood drips with bulbous tips */}
+                  {DRIPS.map((drip, i) => (
+                    <BloodDrip key={`drip-${i}`} {...drip} index={i} />
+                  ))}
+
+                  {/* Blood splatter dots with satellites */}
+                  {SPLATTERS.map((s, i) => (
+                    <BloodSplatter key={`splat-${i}`} {...s} />
                   ))}
                 </motion.div>
 
-                {/* Subtitle with blood theme */}
+                {/* Subtitle */}
                 <motion.p 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.5, duration: 1.2, ease: 'easeOut' }}
-                  className="text-xs md:text-sm tracking-[0.5em] font-mono mt-8 uppercase"
-                  style={{ color: 'rgba(220, 20, 60, 0.6)' }}
+                  transition={{ delay: 2.5, duration: 1.2, ease: 'easeOut' }}
+                  className="text-xs md:text-sm tracking-[0.5em] font-mono mt-10 uppercase"
+                  style={{ 
+                    color: '#8B0000',
+                    textShadow: '0 0 20px rgba(139,0,0,0.5), 0 0 40px rgba(139,0,0,0.2)'
+                  }}
                 >
                   Experience Activated
                 </motion.p>
